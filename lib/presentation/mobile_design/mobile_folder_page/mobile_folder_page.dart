@@ -295,11 +295,13 @@ class _MobileFolderPageState extends State<MobileFolderPage> {
                   const SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    model.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: CommonUtils.titleStyle,
+                  Flexible(
+                    child: Text(
+                      model.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: CommonUtils.titleStyle,
+                    ),
                   ),
                 ],
               ),

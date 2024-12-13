@@ -100,36 +100,40 @@ class _GraphPageState extends State<GraphPage> {
           style: CommonUtils.headerStyle.copyWith(color: Colors.black),
         ),
       ),
-      body: InteractiveViewer(
-        constrained: false,
-        boundaryMargin: const EdgeInsets.all(100),
-        minScale: 0.01,
-        maxScale: 5.6,
-        child: Center(
-          child: GraphView(
-            graph: graph,
-            animated: true,
-            algorithm: SugiyamaAlgorithm(
-              graphBuilder,
-            ),
-            paint: Paint()
-              ..color = Colors.black
-              ..strokeWidth = 1
-              ..style = PaintingStyle.stroke,
-            builder: (Node node) {
-              var folderNode = folders.firstWhereOrNull(
-                (element) => element.id == node.key?.value,
-              );
-              var noteNode = notes.firstWhereOrNull(
-                (element) => element.id == node.key?.value,
-              );
-              debugPrint('assda node value ${node.key?.value}');
+      body: graph.edges.isEmpty
+          ? const Center(
+              child: Text('No Folder or Notes Found'),
+            )
+          : InteractiveViewer(
+              constrained: false,
+              boundaryMargin: const EdgeInsets.all(100),
+              minScale: 0.01,
+              maxScale: 5.6,
+              child: Center(
+                child: GraphView(
+                  graph: graph,
+                  animated: true,
+                  algorithm: SugiyamaAlgorithm(
+                    graphBuilder,
+                  ),
+                  paint: Paint()
+                    ..color = Colors.black
+                    ..strokeWidth = 1
+                    ..style = PaintingStyle.stroke,
+                  builder: (Node node) {
+                    var folderNode = folders.firstWhereOrNull(
+                      (element) => element.id == node.key?.value,
+                    );
+                    var noteNode = notes.firstWhereOrNull(
+                      (element) => element.id == node.key?.value,
+                    );
+                    debugPrint('assda node value ${node.key?.value}');
 
-              return nodeItem(data: folderNode ?? noteNode);
-            },
-          ),
-        ),
-      ),
+                    return nodeItem(data: folderNode ?? noteNode);
+                  },
+                ),
+              ),
+            ),
     );
   }
 
