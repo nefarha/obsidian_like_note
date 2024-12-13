@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:obsidian_like_note/core/color_palette.dart';
 import 'package:obsidian_like_note/presentation/wrapper.dart';
 
 void main() {
@@ -21,6 +22,7 @@ class ObsidianLike extends StatelessWidget {
 ThemeData customThemeData() {
   return ThemeData(
     useMaterial3: false,
+    scaffoldBackgroundColor: ColorPalette.pastelCream,
     textTheme: GoogleFonts.poppinsTextTheme(),
   );
 }
