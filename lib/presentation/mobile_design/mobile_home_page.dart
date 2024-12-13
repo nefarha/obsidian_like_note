@@ -311,7 +311,6 @@ class _MobileNoteExists extends StatelessWidget {
                   var result = await folderRepository
                       .editFolder(id: folderModel.id, newModel: newModel)
                       .run();
-                  debugPrint('assda $result');
                   result.match(
                     (l) => null,
                     (r) {
@@ -321,7 +320,7 @@ class _MobileNoteExists extends StatelessWidget {
                     },
                   );
                 },
-                child: const Text('create'),
+                child: const Text('edit'),
               )
             ],
           ),
