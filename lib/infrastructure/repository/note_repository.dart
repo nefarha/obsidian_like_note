@@ -21,6 +21,16 @@ class NoteRepository implements INoteRepository {
   }
 
   @override
+  TaskEither<String, List<NoteModel>> getAllNotesWithoutId() {
+    return TaskEither.tryCatch(
+      () async {
+        return _noteBox.values.toList();
+      },
+      (error, stackTrace) => error.toString(),
+    );
+  }
+
+  @override
   TaskEither<String, Unit> createNote({required NoteModel model}) {
     return TaskEither.tryCatch(
       () async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' as fp;
+import 'package:obsidian_like_note/presentation/mobile_design/mobile_graph_page/mobile_graph_page.dart';
 import 'package:uuid/uuid.dart';
 import 'package:obsidian_like_note/core/assets_url.dart';
 import 'package:obsidian_like_note/core/color_palette.dart';
@@ -159,92 +160,45 @@ class _MobileNoteEmpty extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 2,
-              child: GestureDetector(
-                onTap: createFolder,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: ColorPalette.pastelBrown,
-                    boxShadow: [
-                      BoxShadow(
-                        color: ColorPalette.pastelBrown.withOpacity(0.5),
-                        spreadRadius: 0,
-                        blurRadius: 0,
-                        offset: const Offset(5, 7),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.create_new_folder_outlined,
-                        color: ColorPalette.pastelGrey,
-                        size: 15,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Create folder',
-                        style: CommonUtils.titleStyle.copyWith(
-                            color: ColorPalette.pastelGrey, fontSize: 12),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+        GestureDetector(
+          onTap: createFolder,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
             ),
-            const SizedBox(
-              width: 20,
-            ),
-            Flexible(
-              flex: 1,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: ColorPalette.pastelBlue,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorPalette.pastelBlue.withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 0,
-                      offset: const Offset(5, 7),
-                    ),
-                  ],
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: ColorPalette.pastelBrown,
+              boxShadow: [
+                BoxShadow(
+                  color: ColorPalette.pastelBrown.withOpacity(0.5),
+                  spreadRadius: 0,
+                  blurRadius: 0,
+                  offset: const Offset(5, 7),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.folder_outlined,
-                      size: 15,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Open',
-                      style: CommonUtils.titleStyle.copyWith(fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
+              ],
             ),
-          ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.create_new_folder_outlined,
+                  color: ColorPalette.pastelGrey,
+                  size: 15,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Create folder',
+                  style: CommonUtils.titleStyle
+                      .copyWith(color: ColorPalette.pastelGrey, fontSize: 12),
+                )
+              ],
+            ),
+          ),
         ),
       ],
     );
@@ -402,39 +356,49 @@ class _MobileNoteExists extends StatelessWidget {
               width: 20,
             ),
             Flexible(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: ColorPalette.pastelGreen,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorPalette.pastelGreen.withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 0,
-                      offset: const Offset(5, 7),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MobileGraphPage(),
                     ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.auto_graph,
-                      size: 15,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Graph',
-                      style: CommonUtils.titleStyle.copyWith(
-                        fontSize: 12,
+                  );
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: ColorPalette.pastelGreen,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorPalette.pastelGreen.withOpacity(0.5),
+                        spreadRadius: 0,
+                        blurRadius: 0,
+                        offset: const Offset(5, 7),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.auto_graph,
+                        size: 15,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Graph',
+                        style: CommonUtils.titleStyle.copyWith(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

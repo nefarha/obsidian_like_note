@@ -6,6 +6,7 @@ abstract interface class INoteRepository {
   static INoteRepository get isntance => Get.find();
 
   TaskEither<String, List<NoteModel>> getAllNotes({required String folderId});
+  TaskEither<String, List<NoteModel>> getAllNotesWithoutId();
   TaskEither<String, Unit> createNote({required NoteModel model});
   TaskEither<String, Unit> deleteNote({required String id});
   TaskEither<String, Unit> editNote(
