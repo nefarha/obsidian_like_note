@@ -25,7 +25,7 @@ mixin _$FolderModel {
   @HiveField(1)
   String get name => throw _privateConstructorUsedError;
   @HiveField(2)
-  String get dateTime => throw _privateConstructorUsedError;
+  DateTime get dateTime => throw _privateConstructorUsedError;
 
   /// Serializes this FolderModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,7 +46,7 @@ abstract class $FolderModelCopyWith<$Res> {
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String name,
-      @HiveField(2) String dateTime});
+      @HiveField(2) DateTime dateTime});
 }
 
 /// @nodoc
@@ -80,7 +80,7 @@ class _$FolderModelCopyWithImpl<$Res, $Val extends FolderModel>
       dateTime: null == dateTime
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
-              as String,
+              as DateTime,
     ) as $Val);
   }
 }
@@ -96,7 +96,7 @@ abstract class _$$FolderModelImplCopyWith<$Res>
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String name,
-      @HiveField(2) String dateTime});
+      @HiveField(2) DateTime dateTime});
 }
 
 /// @nodoc
@@ -128,14 +128,14 @@ class __$$FolderModelImplCopyWithImpl<$Res>
       dateTime: null == dateTime
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
-              as String,
+              as DateTime,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-@HiveType(typeId: 0)
+@HiveType(typeId: 0, adapterName: 'FolderAdapter')
 class _$FolderModelImpl implements _FolderModel {
   const _$FolderModelImpl(
       {@HiveField(0) required this.id,
@@ -153,7 +153,7 @@ class _$FolderModelImpl implements _FolderModel {
   final String name;
   @override
   @HiveField(2)
-  final String dateTime;
+  final DateTime dateTime;
 
   @override
   String toString() {
@@ -195,7 +195,7 @@ abstract class _FolderModel implements FolderModel {
   const factory _FolderModel(
       {@HiveField(0) required final String id,
       @HiveField(1) required final String name,
-      @HiveField(2) required final String dateTime}) = _$FolderModelImpl;
+      @HiveField(2) required final DateTime dateTime}) = _$FolderModelImpl;
 
   factory _FolderModel.fromJson(Map<String, dynamic> json) =
       _$FolderModelImpl.fromJson;
@@ -208,7 +208,7 @@ abstract class _FolderModel implements FolderModel {
   String get name;
   @override
   @HiveField(2)
-  String get dateTime;
+  DateTime get dateTime;
 
   /// Create a copy of FolderModel
   /// with the given fields replaced by the non-null parameter values.

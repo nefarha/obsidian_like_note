@@ -1,20 +1,131 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:fpdart/fpdart.dart' as fp;
+import 'package:uuid/uuid.dart';
 import 'package:obsidian_like_note/core/assets_url.dart';
 import 'package:obsidian_like_note/core/color_palette.dart';
 import 'package:obsidian_like_note/core/common_utils.dart';
+import 'package:obsidian_like_note/infrastructure/interfaces/i_folder_repository.dart';
+import 'package:obsidian_like_note/infrastructure/model/folder/folder_model.dart';
 import 'package:obsidian_like_note/presentation/mobile_design/mobile_folder_page/mobile_folder_page.dart';
 
-class MobileHomePage extends StatelessWidget {
+class MobileHomePage extends StatefulWidget {
   const MobileHomePage({super.key});
 
   @override
+  State<MobileHomePage> createState() => _MobileHomePageState();
+}
+
+class _MobileHomePageState extends State<MobileHomePage> {
+  final _folderRepository = IFolderRepository.instance;
+  final uid = const Uuid();
+
+  var optionOrFolders =
+      const fp.Option<fp.Either<String, List<FolderModel>>>.none();
+
+  final folderNameController = TextEditingController();
+
+  Future getFolders() async {
+    var result = await _folderRepository.getAllFolder().run();
+
+    debugPrint('assda $result');
+
+    setState(() {
+      optionOrFolders = fp.Option.of(result);
+    });
+  }
+
+  createFolder({required BuildContext contextDialog}) async {
+    if (folderNameController.text.isNotEmpty) {
+      final model = FolderModel(
+        id: uid.v1(),
+        name: folderNameController.text,
+        dateTime: DateTime.now(),
+      );
+
+      var result = await _folderRepository.createFolder(model: model).run();
+      result.match(
+        (l) => null,
+        (r) {
+          folderNameController.clear();
+          Navigator.pop(contextDialog);
+          getFolders();
+        },
+      );
+    }
+  }
+
+  createFolderDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Create Folder',
+                style: CommonUtils.titleStyle,
+              ),
+              TextField(
+                maxLines: 1,
+                controller: folderNameController,
+                cursorColor: ColorPalette.pastelGreen,
+                decoration: const InputDecoration(
+                  hintText: 'enter folder name',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  await createFolder(contextDialog: context);
+                },
+                child: const Text('create'),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    getFolders();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20),
-          child: _MobileNoteExists(),
+          padding: const EdgeInsets.all(20),
+          child: optionOrFolders.match(
+            () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            (t) => t.match(
+              (l) => Center(
+                child: Text(l),
+              ),
+              (r) => r.isEmpty
+                  ? _MobileNoteEmpty(
+                      createFolder: () {
+                        createFolderDialog();
+                      },
+                    )
+                  : _MobileNoteExists(
+                      folders: r,
+                      createFolder: () {
+                        createFolderDialog();
+                      },
+                    ),
+            ),
+          ),
         ),
       ),
     );
@@ -22,7 +133,9 @@ class MobileHomePage extends StatelessWidget {
 }
 
 class _MobileNoteEmpty extends StatelessWidget {
-  const _MobileNoteEmpty({super.key});
+  const _MobileNoteEmpty({super.key, required this.createFolder});
+
+  final Function()? createFolder;
 
   @override
   Widget build(BuildContext context) {
@@ -49,41 +162,44 @@ class _MobileNoteEmpty extends StatelessWidget {
           children: [
             Flexible(
               flex: 2,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: ColorPalette.pastelBrown,
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorPalette.pastelBrown.withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 0,
-                      offset: const Offset(5, 7),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.create_new_folder_outlined,
-                      color: ColorPalette.pastelGrey,
-                      size: 15,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Create folder',
-                      style: CommonUtils.titleStyle.copyWith(
-                          color: ColorPalette.pastelGrey, fontSize: 12),
-                    )
-                  ],
+              child: GestureDetector(
+                onTap: createFolder,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: ColorPalette.pastelBrown,
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorPalette.pastelBrown.withOpacity(0.5),
+                        spreadRadius: 0,
+                        blurRadius: 0,
+                        offset: const Offset(5, 7),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.create_new_folder_outlined,
+                        color: ColorPalette.pastelGrey,
+                        size: 15,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Create folder',
+                        style: CommonUtils.titleStyle.copyWith(
+                            color: ColorPalette.pastelGrey, fontSize: 12),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -134,7 +250,11 @@ class _MobileNoteEmpty extends StatelessWidget {
 }
 
 class _MobileNoteExists extends StatelessWidget {
-  const _MobileNoteExists({super.key});
+  const _MobileNoteExists(
+      {super.key, required this.folders, required this.createFolder});
+
+  final Function()? createFolder;
+  final List<FolderModel> folders;
 
   @override
   Widget build(BuildContext context) {
@@ -164,41 +284,44 @@ class _MobileNoteExists extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: ColorPalette.pastelBrown,
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorPalette.pastelBrown.withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 0,
-                      offset: const Offset(5, 7),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.create_new_folder_outlined,
-                      color: ColorPalette.pastelGrey,
-                      size: 15,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Create',
-                      style: CommonUtils.titleStyle.copyWith(
-                          color: ColorPalette.pastelGrey, fontSize: 12),
-                    )
-                  ],
+              child: GestureDetector(
+                onTap: createFolder,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: ColorPalette.pastelBrown,
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorPalette.pastelBrown.withOpacity(0.5),
+                        spreadRadius: 0,
+                        blurRadius: 0,
+                        offset: const Offset(5, 7),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.create_new_folder_outlined,
+                        color: ColorPalette.pastelGrey,
+                        size: 15,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Create',
+                        style: CommonUtils.titleStyle.copyWith(
+                            color: ColorPalette.pastelGrey, fontSize: 12),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -249,16 +372,18 @@ class _MobileNoteExists extends StatelessWidget {
         ),
         Flexible(
           child: ListView.separated(
-            itemBuilder: (context, index) => itemListCard(context: context),
+            itemBuilder: (context, index) =>
+                itemListCard(context: context, model: folders[index]),
             separatorBuilder: (context, index) => const Divider(),
-            itemCount: 100,
+            itemCount: folders.length,
           ),
         ),
       ],
     );
   }
 
-  Widget itemListCard({required BuildContext context}) {
+  Widget itemListCard(
+      {required BuildContext context, required FolderModel model}) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -288,10 +413,12 @@ class _MobileNoteExists extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Folder name',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: CommonUtils.titleStyle),
+                        Text(
+                          model.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: CommonUtils.titleStyle,
+                        ),
                         Text(
                           "10 note(s)",
                           style: CommonUtils.subtitleStyle,

@@ -5,12 +5,12 @@ part 'folder_model.freezed.dart';
 part 'folder_model.g.dart';
 
 @freezed
-class FolderModel with _$FolderModel {
-  @HiveType(typeId: 0)
+abstract class FolderModel with _$FolderModel {
+  @HiveType(typeId: 0, adapterName: 'FolderAdapter')
   const factory FolderModel({
     @HiveField(0) required String id,
     @HiveField(1) required String name,
-    @HiveField(2) required String dateTime,
+    @HiveField(2) required DateTime dateTime,
   }) = _FolderModel;
 
   factory FolderModel.fromJson(Map<String, dynamic> json) =>

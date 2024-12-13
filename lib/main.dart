@@ -8,12 +8,16 @@ import 'package:obsidian_like_note/infrastructure/interfaces/i_folder_repository
 import 'package:obsidian_like_note/infrastructure/model/folder/folder_model.dart';
 import 'package:obsidian_like_note/infrastructure/repository/folder_repository.dart';
 import 'package:obsidian_like_note/presentation/wrapper.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Hive.initFlutter();
+  var path = await getExternalStorageDirectory();
+  Hive.init(path?.path);
 
   await Hive.openBox<FolderModel>('folder');
+
+  Hive.registerAdapter(FolderAdapter());
   runApp(const ObsidianLike());
 }
 
