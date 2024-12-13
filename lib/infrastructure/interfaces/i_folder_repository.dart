@@ -6,4 +6,5 @@ abstract interface class IFolderRepository {
   static IFolderRepository get instance => Get.find();
   TaskEither<String, List<FolderModel>> getAllFolder();
   TaskEither<String, Unit> createFolder({required FolderModel model});
+  TaskEither<String, Unit> deleteFolder({required String id});
 }

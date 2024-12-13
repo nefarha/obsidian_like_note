@@ -27,8 +27,6 @@ class _MobileHomePageState extends State<MobileHomePage> {
   Future getFolders() async {
     var result = await _folderRepository.getAllFolder().run();
 
-    debugPrint('assda $result');
-
     setState(() {
       optionOrFolders = fp.Option.of(result);
     });
@@ -122,6 +120,10 @@ class _MobileHomePageState extends State<MobileHomePage> {
                       folders: r,
                       createFolder: () {
                         createFolderDialog();
+                      },
+                      folderRepository: _folderRepository,
+                      getFolders: () {
+                        getFolders();
                       },
                     ),
             ),
@@ -251,10 +253,27 @@ class _MobileNoteEmpty extends StatelessWidget {
 
 class _MobileNoteExists extends StatelessWidget {
   const _MobileNoteExists(
-      {super.key, required this.folders, required this.createFolder});
+      {super.key,
+      required this.folders,
+      required this.createFolder,
+      required this.folderRepository,
+      required this.getFolders});
 
+  final IFolderRepository folderRepository;
   final Function()? createFolder;
+  final Function()? getFolders;
   final List<FolderModel> folders;
+
+  deleteFolder({required String id}) async {
+    var result = await folderRepository.deleteFolder(id: id).run();
+    debugPrint('assda $result');
+    result.match(
+      (l) => null,
+      (r) {
+        getFolders!();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -390,7 +409,10 @@ class _MobileNoteExists extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const MobileFolderPage(),
+            builder: (context) => MobileFolderPage(
+              id: model.id,
+              title: model.name,
+            ),
           ),
         );
       },
@@ -436,9 +458,14 @@ class _MobileNoteExists extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            const Icon(
-              Icons.delete,
-              color: ColorPalette.pastelBrown,
+            GestureDetector(
+              onTap: () {
+                deleteFolder(id: model.id);
+              },
+              child: const Icon(
+                Icons.delete,
+                color: ColorPalette.pastelBrown,
+              ),
             ),
           ],
         ),

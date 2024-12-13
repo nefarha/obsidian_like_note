@@ -15,9 +15,9 @@ void main() async {
   var path = await getExternalStorageDirectory();
   Hive.init(path?.path);
 
-  await Hive.openBox<FolderModel>('folder');
+  Hive.registerAdapter<FolderModel>(FolderAdapter());
 
-  Hive.registerAdapter(FolderAdapter());
+  await Hive.openBox<FolderModel>('folder');
   runApp(const ObsidianLike());
 }
 

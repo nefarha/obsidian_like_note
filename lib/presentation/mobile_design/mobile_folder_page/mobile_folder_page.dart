@@ -3,9 +3,17 @@ import 'package:obsidian_like_note/core/color_palette.dart';
 import 'package:obsidian_like_note/core/common_utils.dart';
 import 'package:obsidian_like_note/presentation/mobile_design/mobile_note_page/mobile_note_page.dart';
 
-class MobileFolderPage extends StatelessWidget {
-  const MobileFolderPage({super.key});
+class MobileFolderPage extends StatefulWidget {
+  const MobileFolderPage({super.key, required this.id, required this.title});
 
+  final String title;
+  final String id;
+
+  @override
+  State<MobileFolderPage> createState() => _MobileFolderPageState();
+}
+
+class _MobileFolderPageState extends State<MobileFolderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +29,7 @@ class MobileFolderPage extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Folder Name',
+          widget.title,
           style: CommonUtils.headerStyle.copyWith(color: Colors.black),
         ),
       ),
@@ -35,7 +43,7 @@ class MobileFolderPage extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      'Folder Name',
+                      widget.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: CommonUtils.headerStyle,
