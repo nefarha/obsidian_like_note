@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:obsidian_like_note/core/assets_url.dart';
 import 'package:obsidian_like_note/core/color_palette.dart';
 import 'package:obsidian_like_note/core/common_utils.dart';
+import 'package:obsidian_like_note/presentation/mobile_design/mobile_folder_page/mobile_folder_page.dart';
 
 class MobileHomePage extends StatelessWidget {
   const MobileHomePage({super.key});
@@ -209,44 +211,6 @@ class _MobileNoteExists extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: ColorPalette.pastelBlue,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorPalette.pastelBlue.withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 0,
-                      offset: const Offset(5, 7),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.folder_outlined,
-                      size: 15,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Open',
-                      style: CommonUtils.titleStyle.copyWith(fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Flexible(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                width: double.infinity,
-                decoration: BoxDecoration(
                   color: ColorPalette.pastelGreen,
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
@@ -264,7 +228,6 @@ class _MobileNoteExists extends StatelessWidget {
                     const Icon(
                       Icons.auto_graph,
                       size: 15,
-                      color: ColorPalette.pastelGrey,
                     ),
                     const SizedBox(
                       width: 10,
@@ -273,7 +236,6 @@ class _MobileNoteExists extends StatelessWidget {
                       'Graph',
                       style: CommonUtils.titleStyle.copyWith(
                         fontSize: 12,
-                        color: ColorPalette.pastelGrey,
                       ),
                     ),
                   ],
@@ -287,7 +249,7 @@ class _MobileNoteExists extends StatelessWidget {
         ),
         Flexible(
           child: ListView.separated(
-            itemBuilder: (context, index) => itemListCard(),
+            itemBuilder: (context, index) => itemListCard(context: context),
             separatorBuilder: (context, index) => const Divider(),
             itemCount: 100,
           ),
@@ -296,52 +258,63 @@ class _MobileNoteExists extends StatelessWidget {
     );
   }
 
-  Widget itemListCard() {
-    return SizedBox(
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.folder,
-                  color: ColorPalette.pastelBrown,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Folder name',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: CommonUtils.titleStyle),
-                      Text(
-                        "10 note(s)",
-                        style: CommonUtils.subtitleStyle,
-                      ),
-                    ],
+  Widget itemListCard({required BuildContext context}) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MobileFolderPage(),
+          ),
+        );
+      },
+      child: SizedBox(
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.folder,
+                    color: ColorPalette.pastelBrown,
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Folder name',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: CommonUtils.titleStyle),
+                        Text(
+                          "10 note(s)",
+                          style: CommonUtils.subtitleStyle,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Icon(
-            Icons.edit,
-            color: ColorPalette.pastelBrown,
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          const Icon(
-            Icons.delete,
-            color: ColorPalette.pastelBrown,
-          ),
-        ],
+            const Icon(
+              Icons.edit,
+              color: ColorPalette.pastelBrown,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            const Icon(
+              Icons.delete,
+              color: ColorPalette.pastelBrown,
+            ),
+          ],
+        ),
       ),
     );
   }
