@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart' as fp;
 import 'package:obsidian_like_note/core/color_palette.dart';
 import 'package:obsidian_like_note/core/common_utils.dart';
 import 'package:obsidian_like_note/infrastructure/interfaces/i_note_repository.dart';

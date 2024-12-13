@@ -136,7 +136,7 @@ class _MobileHomePageState extends State<MobileHomePage> {
 }
 
 class _MobileNoteEmpty extends StatelessWidget {
-  const _MobileNoteEmpty({super.key, required this.createFolder});
+  const _MobileNoteEmpty({required this.createFolder});
 
   final Function()? createFolder;
 
@@ -207,8 +207,7 @@ class _MobileNoteEmpty extends StatelessWidget {
 
 class _MobileNoteExists extends StatelessWidget {
   _MobileNoteExists(
-      {super.key,
-      required this.folders,
+      {required this.folders,
       required this.createFolder,
       required this.folderRepository,
       required this.getFolders});

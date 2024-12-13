@@ -5,10 +5,8 @@ import 'package:obsidian_like_note/core/common_utils.dart';
 import 'package:obsidian_like_note/infrastructure/interfaces/i_folder_repository.dart';
 import 'package:obsidian_like_note/infrastructure/model/folder/folder_model.dart';
 import 'package:fpdart/fpdart.dart' as fp;
-import 'package:obsidian_like_note/infrastructure/model/note/note_model.dart';
 import 'package:obsidian_like_note/presentation/graph_page.dart';
 import 'package:obsidian_like_note/presentation/web_design/web_folder_page.dart';
-import 'package:obsidian_like_note/presentation/web_design/web_note_page.dart';
 import 'package:uuid/uuid.dart';
 
 class WebHomePage extends StatefulWidget {
@@ -282,7 +280,7 @@ class _WebHomePageState extends State<WebHomePage> {
 }
 
 class _WebNoteEmpty extends StatelessWidget {
-  const _WebNoteEmpty({super.key, required this.createFolder});
+  const _WebNoteEmpty({required this.createFolder});
 
   final Function()? createFolder;
 
@@ -358,8 +356,7 @@ class _WebNoteEmpty extends StatelessWidget {
 
 class _WebNoteExists extends StatelessWidget {
   _WebNoteExists(
-      {super.key,
-      required this.folders,
+      {required this.folders,
       required this.folderRepository,
       required this.getFolders,
       required this.selectFolder});
