@@ -4,6 +4,7 @@ import 'package:obsidian_like_note/core/common_utils.dart';
 import 'package:obsidian_like_note/infrastructure/interfaces/i_note_repository.dart';
 import 'package:obsidian_like_note/infrastructure/model/folder/folder_model.dart';
 import 'package:obsidian_like_note/infrastructure/model/note/note_model.dart';
+import 'package:obsidian_like_note/presentation/web_design/web_note_page.dart';
 import 'package:uuid/uuid.dart';
 import 'package:fpdart/fpdart.dart' as fp;
 
@@ -263,18 +264,18 @@ class _WebFolderPageState extends State<WebFolderPage> {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => MobileNotePage(
-        //       model: model,
-        //     ),
-        //   ),
-        // ).then(
-        //   (value) {
-        //     getAllNotes();
-        //   },
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WebNotePage(
+              model: model,
+            ),
+          ),
+        ).then(
+          (value) {
+            getAllNotes();
+          },
+        );
       },
       child: SizedBox(
         width: double.infinity,

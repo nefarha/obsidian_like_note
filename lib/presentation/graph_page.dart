@@ -11,14 +11,14 @@ import 'package:obsidian_like_note/infrastructure/model/note/note_model.dart';
 import 'package:obsidian_like_note/presentation/mobile_design/mobile_folder_page/mobile_folder_page.dart';
 import 'package:obsidian_like_note/presentation/mobile_design/mobile_note_page/mobile_note_page.dart';
 
-class MobileGraphPage extends StatefulWidget {
-  const MobileGraphPage({super.key});
+class GraphPage extends StatefulWidget {
+  const GraphPage({super.key});
 
   @override
-  State<MobileGraphPage> createState() => _MobileGraphPageState();
+  State<GraphPage> createState() => _GraphPageState();
 }
 
-class _MobileGraphPageState extends State<MobileGraphPage> {
+class _GraphPageState extends State<GraphPage> {
   final _folderRepository = IFolderRepository.instance;
   final _noteRepository = INoteRepository.isntance;
 

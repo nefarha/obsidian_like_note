@@ -5,7 +5,10 @@ import 'package:obsidian_like_note/core/common_utils.dart';
 import 'package:obsidian_like_note/infrastructure/interfaces/i_folder_repository.dart';
 import 'package:obsidian_like_note/infrastructure/model/folder/folder_model.dart';
 import 'package:fpdart/fpdart.dart' as fp;
+import 'package:obsidian_like_note/infrastructure/model/note/note_model.dart';
+import 'package:obsidian_like_note/presentation/graph_page.dart';
 import 'package:obsidian_like_note/presentation/web_design/web_folder_page.dart';
+import 'package:obsidian_like_note/presentation/web_design/web_note_page.dart';
 import 'package:uuid/uuid.dart';
 
 class WebHomePage extends StatefulWidget {
@@ -197,12 +200,12 @@ class _WebHomePageState extends State<WebHomePage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => const MobileGraphPage(),
-                                    //   ),
-                                    // );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const GraphPage(),
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(

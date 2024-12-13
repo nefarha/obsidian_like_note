@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' as fp;
-import 'package:obsidian_like_note/presentation/mobile_design/mobile_graph_page/mobile_graph_page.dart';
+import 'package:obsidian_like_note/presentation/graph_page.dart';
 import 'package:uuid/uuid.dart';
 import 'package:obsidian_like_note/core/assets_url.dart';
 import 'package:obsidian_like_note/core/color_palette.dart';
@@ -361,7 +361,7 @@ class _MobileNoteExists extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const MobileGraphPage(),
+                      builder: (context) => const GraphPage(),
                     ),
                   );
                 },
