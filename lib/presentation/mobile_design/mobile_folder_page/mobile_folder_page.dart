@@ -270,8 +270,14 @@ class _MobileFolderPageState extends State<MobileFolderPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const MobileNotePage(),
+            builder: (context) => MobileNotePage(
+              model: model,
+            ),
           ),
+        ).then(
+          (value) {
+            getAllNotes();
+          },
         );
       },
       child: SizedBox(

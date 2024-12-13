@@ -1,9 +1,46 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart' as fp;
 import 'package:obsidian_like_note/core/color_palette.dart';
 import 'package:obsidian_like_note/core/common_utils.dart';
+import 'package:obsidian_like_note/infrastructure/interfaces/i_note_repository.dart';
+import 'package:obsidian_like_note/infrastructure/model/note/note_model.dart';
 
-class MobileNotePage extends StatelessWidget {
-  const MobileNotePage({super.key});
+class MobileNotePage extends StatefulWidget {
+  const MobileNotePage({super.key, required this.model});
+
+  final NoteModel model;
+
+  @override
+  State<MobileNotePage> createState() => _MobileNotePageState();
+}
+
+class _MobileNotePageState extends State<MobileNotePage> {
+  final _noteRepository = INoteRepository.isntance;
+
+  Timer? _debounce;
+
+  TextEditingController get textController =>
+      TextEditingController(text: widget.model.text);
+
+  void _onTextChanged(String text) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      debugPrint('assda $text');
+      _noteRepository
+          .editNote(
+              id: widget.model.id, newModel: widget.model.copyWith(text: text))
+          .run();
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +57,26 @@ class MobileNotePage extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Folder Name',
+          widget.model.name,
           style: CommonUtils.headerStyle.copyWith(color: Colors.black),
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
                 maxLines: null,
+                autofocus: true,
+                controller: textController,
                 cursorColor: ColorPalette.pastelGreen,
-                decoration: InputDecoration(
+                onChanged: (value) {
+                  _onTextChanged(value);
+                },
+                decoration: const InputDecoration(
                   hintText: 'Write here',
                   border: InputBorder.none,
                 ),
