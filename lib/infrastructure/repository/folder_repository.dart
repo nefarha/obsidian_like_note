@@ -37,7 +37,29 @@ class FolderRepository implements IFolderRepository {
             (element) => _folderBox.get(element)?.id == id,
             orElse: () => null);
 
-        _folderBox.delete(folderKey);
+        if (folderKey != null) {
+          _folderBox.delete(folderKey);
+        }
+
+        return unit;
+      },
+      (error, stackTrace) => error.toString(),
+    );
+  }
+
+  @override
+  TaskEither<String, Unit> editFolder(
+      {required String id, required FolderModel newModel}) {
+    return TaskEither.tryCatch(
+      () async {
+        var folderKey = _folderBox.keys.firstWhere(
+            (element) => _folderBox.get(element)?.id == id,
+            orElse: () => null);
+
+        if (folderKey != null) {
+          _folderBox.put(folderKey, newModel);
+        }
+
         return unit;
       },
       (error, stackTrace) => error.toString(),

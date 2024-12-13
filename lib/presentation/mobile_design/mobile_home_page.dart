@@ -252,7 +252,7 @@ class _MobileNoteEmpty extends StatelessWidget {
 }
 
 class _MobileNoteExists extends StatelessWidget {
-  const _MobileNoteExists(
+  _MobileNoteExists(
       {super.key,
       required this.folders,
       required this.createFolder,
@@ -264,6 +264,8 @@ class _MobileNoteExists extends StatelessWidget {
   final Function()? getFolders;
   final List<FolderModel> folders;
 
+  final folderNameController = TextEditingController();
+
   deleteFolder({required String id}) async {
     var result = await folderRepository.deleteFolder(id: id).run();
     debugPrint('assda $result');
@@ -272,6 +274,59 @@ class _MobileNoteExists extends StatelessWidget {
       (r) {
         getFolders!();
       },
+    );
+  }
+
+  editFolderDialog(
+      {required BuildContext context, required FolderModel folderModel}) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Create Folder',
+                style: CommonUtils.titleStyle,
+              ),
+              TextField(
+                maxLines: 1,
+                controller: folderNameController,
+                cursorColor: ColorPalette.pastelGreen,
+                decoration: const InputDecoration(
+                  hintText: 'enter folder name',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  var newModel = folderModel.copyWith(
+                    name: folderNameController.text,
+                  );
+                  var result = await folderRepository
+                      .editFolder(id: folderModel.id, newModel: newModel)
+                      .run();
+                  debugPrint('assda $result');
+                  result.match(
+                    (l) => null,
+                    (r) {
+                      folderNameController.clear();
+                      Navigator.of(context).pop();
+                      getFolders!();
+                    },
+                  );
+                },
+                child: const Text('create'),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -432,28 +487,27 @@ class _MobileNoteExists extends StatelessWidget {
                     width: 10,
                   ),
                   Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          model.name,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: CommonUtils.titleStyle,
-                        ),
-                        Text(
-                          "10 note(s)",
-                          style: CommonUtils.subtitleStyle,
-                        ),
-                      ],
+                    child: Text(
+                      model.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: CommonUtils.titleStyle,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(
-              Icons.edit,
-              color: ColorPalette.pastelBrown,
+            const SizedBox(
+              width: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                editFolderDialog(context: context, folderModel: model);
+              },
+              child: const Icon(
+                Icons.edit,
+                color: ColorPalette.pastelBrown,
+              ),
             ),
             const SizedBox(
               width: 10,
